@@ -1,0 +1,24 @@
+---
+  - name: setup nginx
+    pkgin: name=nginx state=present
+  - name: setup nginx config
+    template: src=nginxSample.conf dest=/opt/local/etc/nginx/nginx.conf
+  - name: setup sites available
+    file: dest=/opt/local/etc/nginx/sites-available state=directory
+  - name: setup sites enabled
+    file: dest=/opt/local/etc/nginx/sites-enabled state=directory
+  - name: setup site config
+    template: src=siteSample.conf dest=/opt/local/etc/nginx/sites-available/zerowatt.conf
+  - name: enable site
+    file: src=/opt/local/etc/nginx/sites-available/zerowatt.conf dest=/opt/local/etc/nginx/sites-enabled/zerowatt.conf state=link
+  - name: setup site directory
+    file: dest=/opt/local/share/www/sites/zerowatt/html state=directory
+  - name: setup site logs directory
+    file: dest=/opt/local/share/www/sites/zerowatt/logs state=directory
+  - name: deploying static html files
+    template:   src=helloWorld.html 
+                dest=/opt/local/share/www/sites/zerowatt/html/index.html
+                owner=www
+                group=www
+  - name: ensure nginx started
+    service: name=nginx state=restarted

@@ -1,0 +1,3 @@
+---
+  - name: updating pkgin
+    command: pkgin -y up
